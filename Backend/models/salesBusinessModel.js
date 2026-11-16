@@ -1,3 +1,4 @@
+
 const { db } = require('../config/db');
 
 async function createSale(sale, items) {
@@ -12,7 +13,7 @@ async function createSale(sale, items) {
         for (const item of items) {
             const [stock] = await connection.query(
                 `SELECT available_quantity
-                 FROM Stock
+                 FROM stock
                  WHERE fruit_id = ? AND packaging_size = ?
                  FOR UPDATE`,
                 [item.fruit_id, item.packaging_size]
@@ -46,7 +47,7 @@ async function createSale(sale, items) {
 
         // Create the sale
         const [saleResult] = await connection.query(
-            `INSERT INTO Sales
+            `INSERT INTO sales
              (vendor_id, sale_date, payment_status, payment_method,
               amount_paid, total_amount)
              VALUES (?, ?, ?, ?, ?, ?)`,
@@ -65,11 +66,12 @@ async function createSale(sale, items) {
         // Save sale items and reduce stock
         for (const item of items) {
             await connection.query(
-                `INSERT INTO Sales_Details
+                `INSERT INTO sales_details
                  (sale_id, fruit_id, packaging_size, quantity, unit_price)
                  VALUES (?, ?, ?, ?, ?)`,
                 [
                     saleId,
+                    item.fruit_id,
                     item.fruit_id,
                     item.packaging_size,
                     item.quantity,
@@ -78,7 +80,7 @@ async function createSale(sale, items) {
             );
 
             await connection.query(
-                `UPDATE Stock
+                `UPDATE stock
                  SET available_quantity = available_quantity - ?
                  WHERE fruit_id = ? AND packaging_size = ?`,
                 [item.quantity, item.fruit_id, item.packaging_size]

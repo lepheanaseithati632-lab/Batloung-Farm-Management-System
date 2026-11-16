@@ -1,9 +1,10 @@
+
 const { db } = require('../config/db');
 
 // Add sales detail
 async function addSalesDetail(detail) {
     const sql = `
-        INSERT INTO Sales_Details
+        INSERT INTO sales_details
         (sale_id, fruit_id, packaging_size, quantity, unit_price)
         VALUES (?, ?, ?, ?, ?)
     `;
@@ -23,11 +24,11 @@ async function addSalesDetail(detail) {
 async function getAllSalesDetails() {
     const sql = `
         SELECT
-            Sales_Details.*,
-            Fruits.fruit_name
-        FROM Sales_Details
-        JOIN Fruits
-        ON Sales_Details.fruit_id = Fruits.fruit_id
+            sales_details.*,
+            fruits.fruit_name
+        FROM sales_details
+        JOIN fruits
+        ON sales_details.fruit_id = fruits.fruit_id
     `;
 
     const [rows] = await db.query(sql);
@@ -37,7 +38,7 @@ async function getAllSalesDetails() {
 // Get sales details by sale ID
 async function getSalesDetailsBySaleId(id) {
     const [rows] = await db.query(
-        'SELECT * FROM Sales_Details WHERE sale_id = ?',
+        'SELECT * FROM sales_details WHERE sale_id = ?',
         [id]
     );
 
@@ -47,7 +48,7 @@ async function getSalesDetailsBySaleId(id) {
 // Delete sales detail
 async function deleteSalesDetail(id) {
     const [result] = await db.query(
-        'DELETE FROM Sales_Details WHERE sales_detail_id = ?',
+        'DELETE FROM sales_details WHERE sales_detail_id = ?',
         [id]
     );
 

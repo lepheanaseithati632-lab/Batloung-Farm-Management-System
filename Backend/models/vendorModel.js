@@ -1,9 +1,10 @@
+
 const { db } = require('../config/db');
 
 // Add a new vendor
 async function addVendor(vendor) {
     const sql = `
-        INSERT INTO Vendors
+        INSERT INTO vendors
         (vendor_name, phone_number, location, registration_date)
         VALUES (?, ?, ?, ?)
     `;
@@ -20,14 +21,14 @@ async function addVendor(vendor) {
 
 // Get all vendors
 async function getAllVendors() {
-    const [rows] = await db.query('SELECT * FROM Vendors');
+    const [rows] = await db.query('SELECT * FROM vendors');
     return rows;
 }
 
 // Get vendor by ID
 async function getVendorById(id) {
     const [rows] = await db.query(
-        'SELECT * FROM Vendors WHERE vendor_id = ?',
+        'SELECT * FROM vendors WHERE vendor_id = ?',
         [id]
     );
 
@@ -37,7 +38,7 @@ async function getVendorById(id) {
 // Update vendor
 async function updateVendor(id, vendor) {
     const sql = `
-        UPDATE Vendors
+        UPDATE vendors
         SET vendor_name = ?,
             phone_number = ?,
             location = ?
@@ -57,7 +58,7 @@ async function updateVendor(id, vendor) {
 // Delete vendor
 async function deleteVendor(id) {
     const [result] = await db.query(
-        'DELETE FROM Vendors WHERE vendor_id = ?',
+        'DELETE FROM vendors WHERE vendor_id = ?',
         [id]
     );
 

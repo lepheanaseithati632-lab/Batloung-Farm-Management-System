@@ -1,9 +1,10 @@
+
 const { db } = require('../config/db');
 
 // Add a purchase
 async function addPurchase(purchase) {
     const sql = `
-        INSERT INTO Purchases
+        INSERT INTO purchases
         (supplier_id, purchase_date, total_amount)
         VALUES (?, ?, ?)
     `;
@@ -20,10 +21,10 @@ async function addPurchase(purchase) {
 // Get all purchases
 async function getAllPurchases() {
     const [rows] = await db.query(`
-        SELECT Purchases.*, Suppliers.business_name
-        FROM Purchases
-        JOIN Suppliers
-        ON Purchases.supplier_id = Suppliers.supplier_id
+        SELECT purchases.*, suppliers.business_name
+        FROM purchases
+        JOIN suppliers
+        ON purchases.supplier_id = suppliers.supplier_id
     `);
 
     return rows;
@@ -32,7 +33,7 @@ async function getAllPurchases() {
 // Get purchase by ID
 async function getPurchaseById(id) {
     const [rows] = await db.query(
-        'SELECT * FROM Purchases WHERE purchase_id = ?',
+        'SELECT * FROM purchases WHERE purchase_id = ?',
         [id]
     );
 
@@ -42,7 +43,7 @@ async function getPurchaseById(id) {
 // Update purchase
 async function updatePurchase(id, purchase) {
     const sql = `
-        UPDATE Purchases
+        UPDATE purchases
         SET supplier_id = ?,
             purchase_date = ?,
             total_amount = ?
@@ -62,7 +63,7 @@ async function updatePurchase(id, purchase) {
 // Delete purchase
 async function deletePurchase(id) {
     const [result] = await db.query(
-        'DELETE FROM Purchases WHERE purchase_id = ?',
+        'DELETE FROM purchases WHERE purchase_id = ?',
         [id]
     );
 

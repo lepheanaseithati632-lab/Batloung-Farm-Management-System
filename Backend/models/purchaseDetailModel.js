@@ -1,9 +1,10 @@
+
 const { db } = require('../config/db');
 
 // Add purchase detail
 async function addPurchaseDetail(detail) {
     const sql = `
-        INSERT INTO Purchase_Details
+        INSERT INTO purchase_details
         (purchase_id, fruit_id, quantity, unit_cost, packaging_size)
         VALUES (?, ?, ?, ?, ?)
     `;
@@ -23,11 +24,11 @@ async function addPurchaseDetail(detail) {
 async function getAllPurchaseDetails() {
     const sql = `
         SELECT
-            Purchase_Details.*,
-            Fruits.fruit_name
-        FROM Purchase_Details
-        JOIN Fruits
-        ON Purchase_Details.fruit_id = Fruits.fruit_id
+            purchase_details.*,
+            fruits.fruit_name
+        FROM purchase_details
+        JOIN fruits
+        ON purchase_details.fruit_id = fruits.fruit_id
     `;
 
     const [rows] = await db.query(sql);
@@ -37,7 +38,7 @@ async function getAllPurchaseDetails() {
 // Get details by purchase ID
 async function getPurchaseDetailsById(id) {
     const [rows] = await db.query(
-        'SELECT * FROM Purchase_Details WHERE purchase_id = ?',
+        'SELECT * FROM purchase_details WHERE purchase_id = ?',
         [id]
     );
 
@@ -47,7 +48,7 @@ async function getPurchaseDetailsById(id) {
 // Delete purchase detail
 async function deletePurchaseDetail(id) {
     const [result] = await db.query(
-        'DELETE FROM Purchase_Details WHERE purchase_detail_id = ?',
+        'DELETE FROM purchase_details WHERE purchase_detail_id = ?',
         [id]
     );
 

@@ -28,7 +28,7 @@ async function createPurchase(purchase, items) {
 
         // Create purchase record
         const [purchaseResult] = await connection.query(
-            `INSERT INTO Purchases
+            `INSERT INTO purchases
              (supplier_id, purchase_date, total_amount)
              VALUES (?, ?, ?)`,
             [
@@ -43,7 +43,7 @@ async function createPurchase(purchase, items) {
         // Save purchase details and update stock
         for (const item of items) {
             await connection.query(
-                `INSERT INTO Purchase_Details
+                `INSERT INTO purchase_details
                  (purchase_id, fruit_id, quantity, unit_cost, packaging_size)
                  VALUES (?, ?, ?, ?, ?)`,
                 [
@@ -57,7 +57,7 @@ async function createPurchase(purchase, items) {
 
             const [stockRows] = await connection.query(
                 `SELECT stock_id
-                 FROM Stock
+                 FROM stock
                  WHERE fruit_id = ? AND packaging_size = ?
                  FOR UPDATE`,
                 [item.fruit_id, item.packaging_size]
@@ -65,14 +65,14 @@ async function createPurchase(purchase, items) {
 
             if (stockRows.length > 0) {
                 await connection.query(
-                    `UPDATE Stock
+                    `UPDATE stock
                      SET available_quantity = available_quantity + ?
                      WHERE stock_id = ?`,
                     [item.quantity, stockRows[0].stock_id]
                 );
             } else {
                 await connection.query(
-                    `INSERT INTO Stock
+                    `INSERT INTO stock
                      (fruit_id, packaging_size, available_quantity)
                      VALUES (?, ?, ?)`,
                     [

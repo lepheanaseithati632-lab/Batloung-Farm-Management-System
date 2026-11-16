@@ -5,13 +5,13 @@ const { db } = require('../config/db');
 async function getAllStock() {
     const sql = `
         SELECT 
-            Stock.stock_id,
-            Fruits.fruit_name,
-            Stock.packaging_size,
-            Stock.available_quantity
-        FROM Stock
-        JOIN Fruits ON Stock.fruit_id = Fruits.fruit_id
-        ORDER BY Fruits.fruit_name, Stock.packaging_size
+            stock.stock_id,
+            fruits.fruit_name,
+            stock.packaging_size,
+            stock.available_quantity
+        FROM stock
+        JOIN fruits ON stock.fruit_id = fruits.fruit_id
+        ORDER BY fruits.fruit_name, stock.packaging_size
     `;
 
     const [rows] = await db.query(sql);
@@ -22,13 +22,13 @@ async function getAllStock() {
 async function getStockByFruitId(id) {
     const sql = `
         SELECT 
-            Stock.stock_id,
-            Fruits.fruit_name,
-            Stock.packaging_size,
-            Stock.available_quantity
-        FROM Stock
-        JOIN Fruits ON Stock.fruit_id = Fruits.fruit_id
-        WHERE Stock.fruit_id = ?
+            stock.stock_id,
+            fruits.fruit_name,
+            stock.packaging_size,
+            stock.available_quantity
+        FROM stock
+        JOIN fruits ON stock.fruit_id = fruits.fruit_id
+        WHERE stock.fruit_id = ?
     `;
 
     const [rows] = await db.query(sql, [id]);
@@ -38,7 +38,7 @@ async function getStockByFruitId(id) {
 // Update available stock
 async function updateStock(id, quantity) {
     const sql = `
-        UPDATE Stock
+        UPDATE stock
         SET available_quantity = ?
         WHERE stock_id = ?
     `;

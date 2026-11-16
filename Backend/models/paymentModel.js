@@ -9,7 +9,7 @@ async function recordPayment(saleId, paymentAmount) {
 
         const [sales] = await connection.query(
             `SELECT total_amount, amount_paid
-             FROM Sales
+             FROM sales
              WHERE sale_id = ?
              FOR UPDATE`,
             [saleId]
@@ -40,7 +40,7 @@ async function recordPayment(saleId, paymentAmount) {
         }
 
         await connection.query(
-            `UPDATE Sales
+            `UPDATE sales
              SET amount_paid = ?, payment_status = ?
              WHERE sale_id = ?`,
             [newAmountPaid, paymentStatus, saleId]
