@@ -1,0 +1,62 @@
+const { db } = require('../config/db');
+
+// Add a new fruit
+async function addFruit(fruit) {
+    const sql = `INSERT INTO Fruits
+    (fruit_name, description, status)
+    VALUES (?, ?, ?)`;
+
+    const [result] = await db.query(sql, [
+        fruit.fruit_name,
+        fruit.description,
+        fruit.status || 'Available'
+    ]);
+
+    return result;
+}
+
+// Get all fruits
+async function getAllFruits() {
+    const [rows] = await db.query('SELECT * FROM Fruits');
+    return rows;
+}
+
+// Get fruit by ID
+async function getFruitById(id) {
+    const [rows] = await db.query(
+        'SELECT * FROM Fruits WHERE fruit_id = ?', [id]
+    );
+    return rows[0];
+}
+
+// Update fruit
+async function updateFruit(id, fruit) {
+    const sql = `UPDATE Fruits
+    SET fruit_name = ?, description = ?, status = ?
+    WHERE fruit_id = ?`;
+
+    const [result] = await db.query(sql, [
+        fruit.fruit_name,
+        fruit.description,
+        fruit.status,
+        id
+    ]);
+
+    return result;
+}
+
+// Delete fruit
+async function deleteFruit(id) {
+    const [result] = await db.query(
+        'DELETE FROM Fruits WHERE fruit_id = ?', [id]
+    );
+    return result;
+}
+
+module.exports = {
+    addFruit,
+    getAllFruits,
+    getFruitById,
+    updateFruit,
+    deleteFruit
+};
