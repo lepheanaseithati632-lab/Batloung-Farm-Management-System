@@ -72,18 +72,22 @@ async function createSale(sale, items) {
                 [
                     saleId,
                     item.fruit_id,
-                    item.fruit_id,
                     item.packaging_size,
                     item.quantity,
                     item.unit_price
                 ]
             );
 
+            // Reduce available stock
             await connection.query(
                 `UPDATE stock
                  SET available_quantity = available_quantity - ?
                  WHERE fruit_id = ? AND packaging_size = ?`,
-                [item.quantity, item.fruit_id, item.packaging_size]
+                [
+                    item.quantity,
+                    item.fruit_id,
+                    item.packaging_size
+                ]
             );
         }
 
