@@ -5,15 +5,14 @@ const { db } = require('../config/db');
 async function addVendor(vendor) {
     const sql = `
         INSERT INTO vendors
-        (vendor_name, phone_number, location, registration_date)
-        VALUES (?, ?, ?, ?)
+        (vendor_name, phone_number, location)
+        VALUES (?, ?, ?)
     `;
 
     const [result] = await db.query(sql, [
         vendor.vendor_name,
         vendor.phone_number,
-        vendor.location,
-        vendor.registration_date || null
+        vendor.location
     ]);
 
     return result;
@@ -21,7 +20,9 @@ async function addVendor(vendor) {
 
 // Get all vendors
 async function getAllVendors() {
-    const [rows] = await db.query('SELECT * FROM vendors');
+    const [rows] = await db.query(
+        'SELECT * FROM vendors ORDER BY registration_date DESC'
+    );
     return rows;
 }
 
